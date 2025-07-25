@@ -3,7 +3,7 @@
 - name: Set domain adapter
   ansible.builtin.set_fact:
     domain_adapter: "{{ item.connection_name }}"
-    cacheable: yes
+    cacheable: true
   when: item.ipv4.address == hostvars[dict_key].ansible_host
   with_items: "{{ ansible_interfaces }}"
 

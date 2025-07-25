@@ -2,34 +2,34 @@
 # Networking configuration tasks
 
 # DNS configuration
-- name: "Force a DNS on the adapter {{nat_adapter}}"
+- name: "Force a DNS on the adapter {{ nat_adapter }}"
   ansible.windows.win_dns_client:
-    adapter_names: "{{nat_adapter}}"
-    dns_servers: 
-      - "{{hostvars[dns_domain].ansible_host}}"
-      - "{{dns_server}}"
+    adapter_names: "{{ nat_adapter }}"
+    dns_servers:
+      - "{{ hostvars[dns_domain].ansible_host }}"
+      - "{{ dns_server }}"
   when: force_dns_server == "yes"
 
 # Static route configuration
 - name: Add a network static route
   community.windows.win_route:
-    destination: "{{route_network}}"
-    gateway: "{{route_gateway}}"
+    destination: "{{ route_network }}"
+    gateway: "{{ route_gateway }}"
     metric: 1
     state: present
-  when: add_route == "yes" 
+  when: add_route == "yes"
 
 # Proxy configuration tasks
 - name: Set a proxy for specific protocols
   community.windows.win_http_proxy:
     proxy:
-      http: "{{ad_http_proxy}}"
-      https: "{{ad_https_proxy}}"
+      http: "{{ ad_http_proxy }}"
+      https: "{{ ad_https_proxy }}"
   when: http_proxy == "yes"
 
 - name: Configure IE to use a specific proxy per protocol
   community.windows.win_inet_proxy:
     proxy:
-      http: "{{ad_http_proxy}}"
-      https: "{{ad_https_proxy}}"
-  when: http_proxy == "yes" 
+      http: "{{ ad_http_proxy }}"
+      https: "{{ ad_https_proxy }}"
+  when: http_proxy == "yes"

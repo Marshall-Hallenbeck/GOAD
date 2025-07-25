@@ -14,8 +14,8 @@
   register: vmware_tools_installed
 
 - name: Install VM Guest Tools if using VMware or VMware ESXi
-  win_shell: |
+  ansible.windows.win_shell: |
     powershell.exe -ExecutionPolicy Bypass -File "{{ playbook_dir }}\\roles\\common\\files\\vm-guest-tools.ps1"
-  when: 
-    - goad_provider is defined and (goad_provider == 'vmware' or goad_provider == 'vmware_esxi')
-    - vmware_tools_installed.exists == false 
+  when:
+    - goad_provider is defined and goad_provider in ['vmware', 'vmware_esxi']
+    - not vmware_tools_installed.exists
