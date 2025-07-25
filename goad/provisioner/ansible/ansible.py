@@ -4,6 +4,8 @@ from goad.utils import *
 from goad.log import Log
 from goad.provisioner.provisioner import Provisioner
 from goad.goadpath import GoadPath
+import tempfile
+import os
 
 
 class Ansible(Provisioner):
@@ -64,11 +66,30 @@ class Ansible(Provisioner):
         provision_result = False
         if playbook is None:
             playbooks = self.get_playbook_list(self.lab_name)
-            for playbook in playbooks:
-                provision_result = self.run_playbook(playbook, inventory)
-                if not provision_result:
-                    Log.error(f'Something wrong during the provisioning task : {playbook}')
-                    return False
+
+            ansible_dir = GoadPath.get_provisioner_path()
+            
+            # we dont automatically delete the file because when we open it for writing and close it, it would be deleted
+            # so we delete it manually in the finally block
+            with tempfile.NamedTemporaryFile(mode="w", dir=ansible_dir, suffix=".yml", delete=False) as f:
+                Log.info(f"Writing playbook to {f.name}")
+                f.write("---\n")
+                for pb in playbooks:
+                    f.write(f"- import_playbook: {pb}\n")
+                f.close()
+            
+                try:
+                    Log.info(f"Running playbook")
+                    provision_result = self.run_playbook(f.name, inventory)
+                except Exception as e:
+                    Log.error(f"Error running playbook: {e}")
+                    provision_result = False
+                finally:
+                    try:
+                        Log.info(f"Deleting temporary playbook {f.name}")
+                        os.remove(f.name)
+                    except Exception as e:
+                        Log.error(f"Error deleting temporary playbook: {e}")
         else:
             provision_result = self.run_playbook(playbook, inventory)
         return provision_result
