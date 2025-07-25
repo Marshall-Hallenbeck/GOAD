@@ -2,7 +2,8 @@ boxes.append(
     {
         :name => "{{lab_name}}-WS01",
         :ip => "{{ip_range}}.31",
-        :box => "mayfly/windows10",
+        :box => "gusztavvargadr/windows-10-22h2-enterprise",
+        :box_version => "2506.0.0",
         :os => "windows",
         :cpus => 2,
         :mem => 4000
