@@ -1,0 +1,10 @@
+---
+# Windows licensing tasks
+- name: Get Windows license information
+  community.windows.win_product_facts:
+
+- name: Extend Windows license evaluation if needed
+  win_shell: |
+    slmgr /rearm
+  when:
+    - ansible_os_license_status != "Licensed" 

@@ -1,0 +1,20 @@
+---
+# Remote Desktop configuration tasks
+- name: Windows | Enable Remote Desktop
+  win_dsc:
+    resource_name: RemoteDesktopAdmin
+    IsSingleInstance : 'yes'
+    Ensure: present
+    UserAuthentication: Secure
+
+- name: Firewall | Allow RDP through Firewall
+  win_dsc:
+    resource_name: xFirewall
+    Name: "Administrator access for RDP (TCP-In)"
+    Ensure: present
+    Enabled: True
+    Profile: "Domain"
+    Direction: "Inbound"
+    Localport: "3389"
+    Protocol: "TCP"
+    Description: "Opens the listener port for RDP" 

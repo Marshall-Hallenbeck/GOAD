@@ -1,0 +1,43 @@
+---
+# Network adapter detection - run once and cache results
+- name: Set domain adapter
+  ansible.builtin.set_fact:
+    domain_adapter: "{{ item.connection_name }}"
+    cacheable: yes
+  when: item.ipv4.address == hostvars[dict_key].ansible_host
+  with_items: "{{ ansible_interfaces }}"
+
+- name: Set NAT adapter
+  ansible.builtin.set_fact:
+    nat_adapter: "{{ item.connection_name }}"
+    cacheable: true
+  when: item.ipv4.address != hostvars[dict_key].ansible_host
+  with_items: "{{ ansible_interfaces }}"
+
+- name: Set number of interfaces
+  ansible.builtin.set_fact:
+    number_of_interfaces: "{{ ansible_interfaces | length }}"
+    cacheable: true
+
+- name: Set two_adapters fact
+  ansible.builtin.set_fact:
+    two_adapters: "{{ (ansible_interfaces | length) > 1 }}"
+    cacheable: true
+
+- name: Set NAT adapter to domain adapter when only one adapter
+  ansible.builtin.set_fact:
+    nat_adapter: "{{ domain_adapter }}"
+    cacheable: true
+  when: not two_adapters
+
+- name: Display domain interface
+  ansible.builtin.debug:
+    msg: "domain interface : {{ domain_adapter }}"
+
+- name: Display NAT interface
+  ansible.builtin.debug:
+    msg: "nat interface : {{ nat_adapter }}"
+
+- name: Display two_adapters value
+  ansible.builtin.debug:
+    msg: "two_adapters : {{ two_adapters }}"

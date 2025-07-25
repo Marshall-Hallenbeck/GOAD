@@ -1,7 +1,10 @@
 .vagrant/
+.ansible/
+.ansible-lint*
 .idea/
 .venv/
 .archives/
+.github/
 writeup/
 docs/scenarios/
 docs/notes.md
@@ -38,3 +41,4 @@ docs/site/
 docs/olddocs/
 docs/mkdocs/site/
 scripts/archives/
+ansible/tmp*.yml
