@@ -1,18 +1,18 @@
 ---
 # Remote Desktop configuration tasks
 - name: Windows | Enable Remote Desktop
-  community.windows.win_dsc:
+  ansible.windows.win_dsc:
     resource_name: RemoteDesktopAdmin
-    IsSingleInstance: true
+    IsSingleInstance: 'Yes'
     Ensure: present
     UserAuthentication: Secure
 
 - name: Firewall | Allow RDP through Firewall
-  community.windows.win_dsc:
+  ansible.windows.win_dsc:
     resource_name: xFirewall
     Name: "Administrator access for RDP (TCP-In)"
     Ensure: present
-    Enabled: true
+    Enabled: 'True'
     Profile: "Domain"
     Direction: "Inbound"
     Localport: "3389"

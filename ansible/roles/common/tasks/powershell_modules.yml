@@ -7,11 +7,11 @@
     Install-Module PowerShellGet -Force
 
 - name: Windows | Check for ComputerManagementDsc Powershell module
-  ansible.windows.win_psmodule:
+  community.windows.win_psmodule:
     name: ComputerManagementDsc
     state: present
 
 - name: Windows | Check for xNetworking Powershell module
-  ansible.windows.win_psmodule:
+  community.windows.win_psmodule:
     name: xNetworking
     state: present

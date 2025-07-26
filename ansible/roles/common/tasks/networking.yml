@@ -1,7 +1,6 @@
 ---
 # Networking configuration tasks
 
-# DNS configuration
 - name: "Force a DNS on the adapter {{ nat_adapter }}"
   ansible.windows.win_dns_client:
     adapter_names: "{{ nat_adapter }}"
@@ -10,7 +9,6 @@
       - "{{ dns_server }}"
   when: force_dns_server == "yes"
 
-# Static route configuration
 - name: Add a network static route
   community.windows.win_route:
     destination: "{{ route_network }}"
@@ -19,7 +17,6 @@
     state: present
   when: add_route == "yes"
 
-# Proxy configuration tasks
 - name: Set a proxy for specific protocols
   community.windows.win_http_proxy:
     proxy:
